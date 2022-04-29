@@ -14,14 +14,14 @@ float angle2 = 0;
 GLvoid rotate_angle_1(int value) {
     // fait un random entre 0 et 360
 //    angle = rand() % 180;
-    angle -= 0.1;
+    angle -= 0.20;
     glutPostRedisplay(); //Tell GLUT that the scene has changed
 }
 
 GLvoid rotate_angle_2(int value) {
     // fait un random entre 0 et 360
 //    angle = rand() % 180;
-    angle2 -= 0.5;
+    angle2 -= 1;
     glutPostRedisplay(); //Tell GLUT that the scene has changed
 }
 
@@ -104,7 +104,7 @@ GLvoid monclavier(unsigned char key, int x, int y)
         case 'b':
             std::cout << "la souris est à " << x <<" "<< y << std::endl;
             break;
-        case'n':
+        case'z':
             glutIdleFunc(mon_window_display);
             rotate_angle_1(200);
             break;
