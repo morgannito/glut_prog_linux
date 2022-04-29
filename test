@@ -1,0 +1,317 @@
+/*****************************************
+IMERIR
+POLE ICAR
+
+AR
+*******************************************/
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+//#include <GL/glut.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "glut.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+#define WIDTH  480
+#define HEIGHT 480
+
+#define RED   0
+#define GREEN 0
+#define BLUE  0
+#define ALPHA 1
+
+#define KEY_ESC 27
+int cpt = 0;
+int cpt2 = 0;
+int angle = 0;
+int T = 0;
+void init_scene();
+
+GLvoid initGL();
+GLvoid mon_window_display();
+GLvoid mon_window_reshape(GLsizei width, GLsizei height);
+GLvoid mon_window_key(unsigned char key, int x, int y);
+GLvoid mon_mouse(int button, int state, int x, int y);
+
+
+int main(int argc, char** argv)
+{
+    // initialisation  des parametres de GLUT en fonction
+    // des arguments sur la ligne de commande
+    glutInit(&argc, argv);
+    // initialisation du contexte grapique
+    glutInitDisplayMode(GLUT_RGBA);
+
+    // définition et creation de la fenetre graphique
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutInitWindowPosition(0, 0);
+    glutCreateWindow("Premier exemple : carré");
+
+    // initialisation de OpenGL et de la sc�ne
+    initGL();
+
+    // choix des procedures de callback pour
+    // le trace graphique
+    glutDisplayFunc(&mon_window_display);
+    // le redimensionnement de la fenetre
+    glutReshapeFunc(&mon_window_reshape);
+    // la gestion des evenements clavier
+    glutKeyboardFunc(&mon_window_key);
+    //gestion des evenement souris
+    glutMouseFunc(&mon_mouse);
+
+    // la boucle prinicipale de gestion des evenements utilisateur
+    glutMainLoop();
+
+    return 1;
+}
+
+// initialisation du fond de la fenetre graphique : noir opaque
+
+GLvoid initGL()
+{
+    glClearColor(RED, GREEN, BLUE, ALPHA);  //ALPHA
+}
+
+
+// fonction de call-back pour l�affichage dans la fenetre
+
+GLvoid mon_window_display()
+{
+    /*glClear(GL_COLOR_BUFFER_BIT); // initialise le buffer  la couleur du fond.
+    glLoadIdentity();	//initialisation de la matrice courant GL_MODELVIEW
+    glRotated(angle, 0, 0, 1);
+
+
+
+    glColor3f(1, 1, 1); // couleur du dessin
+    glBegin(GL_POLYGON);
+    glVertex2f(-1, 1);
+    glVertex2f(0, 1);
+    glVertex2f(0, 0);
+    glVertex2f(-1, 0);
+    glEnd();
+
+    glColor3f(1, 0, 0);
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 1);
+    glVertex2f(1, 1);
+    glVertex2f(1, 0);
+    glVertex2f(0, 0);
+    glEnd();
+
+    glColor3f(0, 1, 0);
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 0);
+    glVertex2f(1, 0);
+    glVertex2f(1, -1);
+    glVertex2f(0, -1);
+    glEnd();
+
+    glColor3f(0, 0, 1);
+    glBegin(GL_POLYGON);
+    glVertex2f(-1, 0);
+    glVertex2f(0, 0);
+    glVertex2f(0, -1);
+    glVertex2f(-1, -1);
+    glEnd();*/
+
+
+
+
+    glClear(GL_COLOR_BUFFER_BIT); // initialise le buffer a la couleur du fond.
+    glLoadIdentity(); //initialisation de la matrice courant GL_MODELVIEW
+    glRotatef(angle, 0, 0, 1);
+    glTranslated(T, 0,0);
+
+    glBegin(GL_POLYGON); // debut description de polygones
+    glColor3f(1.0, 1.0, 1.0); // modifie la couleur active en rouge
+    glVertex2f(-0.25, 0.25); // primitive de specification d’un sommet du polygone
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(0.25, 0.25); // Ici on dessine un polygon en 2D, il n’y a donc besoin que de deux coordonnees
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(0.25, -0.25);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(-0.25, -0.25); // par defaut le dernier point est relie au premier
+    glEnd();// fin description
+
+
+
+    // trace la sc�ne grapnique stocke dans le buffer image qui vient juste d'etre definie
+
+
+
+    // trace la scene grapnique stocke dans le buffer image qui vient juste d'etre définie
+    glFlush();
+}
+GLvoid update1(int value) {
+    angle -=90;
+    glutPostRedisplay(); //Tell GLUT that the scene has changed
+
+}
+GLvoid update2(int value) {
+    angle += 90;
+    glutPostRedisplay(); //Tell GLUT that the scene has changed
+}
+GLvoid translate1(int value) {
+    T = T + 1;
+    glutPostRedisplay();
+}
+GLvoid translate2(int value) {
+    T = T - 1;
+    glutPostRedisplay();
+}
+
+
+
+// fonction de call-back pour le redimensionnement de la fen�tre si on modifie sa taile.
+
+GLvoid mon_window_reshape(GLsizei width, GLsizei height)
+{
+    glViewport(0, 0, width, height);
+
+    glMatrixMode(GL_PROJECTION); //indique le type  de transformation et charge la matrice correspondante
+    glLoadIdentity();		//Initialise la matrice courante � la matrice Identite.
+    gluOrtho2D(-2.0, 2.0, -2.0, 2.0);//definit le type de projection : orthogonal 2D,
+    //et ses parametres e partir desquels OpenGl construit la matrice de projection correspondante.
+
+    // toutes les transformations suivantes s'appliquent au mod�le de vue
+    glMatrixMode(GL_MODELVIEW);
+}
+
+
+GLvoid mon_mouse(int button, int state, int x, int y) {
+    switch (button)
+    {
+    case GLUT_LEFT_BUTTON:
+        printf("boutton gauche\n");
+        if (state == GLUT_DOWN) {
+            cpt = cpt + 1;
+    if (cpt == 1)
+    {
+        glClearColor(1, 0, 0, ALPHA);
+        glutPostRedisplay();
+    }
+    else if (cpt == 2)
+    {
+        glClearColor(0, 1, 0, ALPHA);
+        glutPostRedisplay();
+    }
+
+    else if (cpt == 3)
+    {
+        glClearColor(0, 0, 1, ALPHA);
+        glutPostRedisplay();
+    }
+
+    else if (cpt == 4)
+    {
+        glClearColor(1, 1, 1, ALPHA);
+        glutPostRedisplay();
+    }
+    else if (cpt == 5) {
+        glClearColor(0, 0, 0, ALPHA);
+        cpt = 0;
+        glutPostRedisplay();
+    }
+}
+        if (state == GLUT_UP) {
+
+        }
+        break;
+        cpt2 = cpt;
+    case GLUT_RIGHT_BUTTON:
+        printf("Bouton Droit\n");
+        if (state == GLUT_DOWN) {
+            cpt = cpt - 1;
+            if (cpt == 1) {
+                glClearColor(1, 0, 0, ALPHA);
+                glutPostRedisplay();
+                cpt = 6;
+            }
+            else if (cpt == 2) {
+                glClearColor(0, 1, 0, ALPHA);
+                glutPostRedisplay();
+            }
+            else if (cpt == 3) {
+                glClearColor(0, 0, 1, ALPHA);
+                glutPostRedisplay();
+            }
+            else if (cpt == 4) {
+                glClearColor(1, 1, 1, ALPHA);
+                glutPostRedisplay();
+            }
+            else if (cpt == 5) {
+                glClearColor(0, 0, 0, ALPHA);
+                glutPostRedisplay();
+            }
+        }
+        if (state == GLUT_UP) {
+        }
+        break;
+
+    default:
+        printf("Erreur??\n");
+        break;
+    }
+
+}
+// fonction de call-back pour la gestion des evenements clavier
+
+GLvoid mon_window_key(unsigned char key, int x, int y)
+{
+    int clicbouton = 0;
+    switch (key) {
+
+    case KEY_ESC:
+        exit(1);
+        break;
+    case 'r':
+        glClearColor(1, 0, 0, ALPHA);
+        break;
+    case 'g':
+        glClearColor(0, 1, 0, ALPHA);
+        break;
+    case 'b':
+        glClearColor(0, 0, 1, ALPHA);
+        break;
+    /*case 'X' :
+        glutIdleFunc(mon_window_display);
+        update2(200);
+        break;
+    case 'x':
+        glutIdleFunc(mon_window_display);
+        update1(200);
+        break;*/
+    case 'a':
+        glutIdleFunc(mon_window_display);
+        update1(200);
+        break;
+    case 'A':
+        glutIdleFunc(mon_window_display);
+        update2(200);
+        break;
+    case't':
+        glutIdleFunc(mon_window_display);
+        translate1(200);
+        break;
+    case'T':
+        glutIdleFunc(mon_window_display);
+        translate2(200);
+        break;
+    case'n':
+        glutIdleFunc(mon_window_display);
+        rotate(200);
+        break;
+
+    default:
+        printf("La touche %d n'est pas active.\n", key);
+        break;
+    }
+
+    glutPostRedisplay();
+}

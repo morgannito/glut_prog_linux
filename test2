@@ -1,0 +1,81 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <iostream>
+
+int angle = 0;
+
+
+
+GLvoid rotate(int value) {
+    // fait un random entre 0 et 360
+    angle = rand() % 180;
+//    angle += 1;
+    glutPostRedisplay(); //Tell GLUT that the scene has changed
+}
+
+void mon_window_display(){
+
+    glClear(GL_COLOR_BUFFER_BIT); // initialise le buffer a la couleur du fond.
+//    glLoadIdentity(); //initialisation de la matrice courant GL_MODELVIEW
+    glRotatef(angle, 0, 0, 1);
+    glTranslated(0.1, 0.1,0);
+
+    glBegin(GL_POLYGON); // debut description de polygones
+    glColor3f(1.0, 1.0, 1.0); // modifie la couleur active en rouge
+    glVertex2f(-0.25, 0.25); // primitive de specification d’un sommet du polygone
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(0.25, 0.25); // Ici on dessine un polygon en 2D, il n’y a donc besoin que de deux coordonnees
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(0.25, -0.25);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex2f(-0.25, -0.25); // par defaut le dernier point est relie au premier
+    glEnd();// fin description
+    glutSwapBuffers();
+}
+
+GLvoid monclavier(unsigned char key, int x, int y)
+{
+    int clicbouton = 0;
+    switch (key) {
+        case 'a':
+            glutIdleFunc(mon_window_display);
+            break;
+        case 'b':
+            std::cout << "la souris est à " << x <<" "<< y << std::endl;
+            break;
+
+        case'n':
+            glutIdleFunc(mon_window_display);
+            rotate(200);
+            break;
+
+        default:
+            printf("La touche %d n'est pas active.\n", key);
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc,argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutCreateWindow(argv[0]);
+    glutKeyboardFunc(monclavier);
+    glutDisplayFunc(mon_window_display);
+    glutMainLoop();
+    return 0;
+}
+
+
+
+
+
