@@ -82,14 +82,6 @@ void mon_window_display(){
 
 
 
-    // le bras
-//    glColor3f(0, 1, 0);
-//    glTranslatef(0.0, 0.0, 0.0);
-//    glRotatef(angle, 0, 0, 1);
-//    glRectd(-0.2, -0.2, 0.2, 0.2);
-
-
-
 
 //    DrawSquare();
 
